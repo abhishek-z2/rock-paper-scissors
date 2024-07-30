@@ -1,10 +1,33 @@
+
+
+console.log("Your game has begun !")
+
+
+
+let humanScore =0;
+let computerScore =0;
+
+const outputWindow= document.createElement("div");
+outputWindow.style.cssText= 'display:flex;background-color: pink; justify-content:center;border:1px solid green;';
+document.body.appendChild(outputWindow);
+
+
+const messageDiv = document.createElement('div');
+messageDiv.textContent='the game has started';
+outputWindow.appendChild(messageDiv);
+
+function updateMessage(message){
+    messageDiv.textContent=message;
+}
+
+
 function getComputerChoice(){
-    const randomNumber = Math.random()*10;
+    const randomNumber = Math.floor(Math.random()*3);
      
 
-    if(randomNumber<3)
+    if(randomNumber==0)
         return "scissors";
-    else if(randomNumber>3 && randomNumber<7){
+    else if(randomNumber==1){
         return "rock";
     }
     else 
@@ -12,71 +35,91 @@ function getComputerChoice(){
  
 }
 
-console.log("Your game has begun !")
+console.log(getComputerChoice());
 
-function getHumanChoice(){
-    let humanChoice= prompt("Your turn !");
-    
-    return humanChoice;
-
-}
-// console.log(getHumanChoice())
-
-let humanScore =0;
-let computerScore =0;
 
 
 function playRound(humanChoice,computerChoice){
 
-    console.log(humanChoice+" "+computerChoice)
-    if(humanChoice=="scissors"&&computerChoice=="paper"){
+     let status='';
+    if(humanChoice==computerChoice){
+        console.log("same choice");
+        status='tie';
+    }
+    else if(humanChoice=="rock"&&computerChoice=="scissors"||
+        humanChoice=="paper"&&computerChoice=="rock"||
+        humanChoice=="scissors"&&computerChoice=="paper"){
         humanScore++;
 
-    }
-    else if(humanChoice=="scissors"&&computerChoice=="rock"){
+            
+        }
+        else{
         computerScore++;
-    }
-    else if(humanChoice=="paper"&&computerChoice=="rock"){
-        humanScore++;
-    }
-    else if(humanChoice=="paper"&&computerChoice=="scissors"){
-        computerScore++;
-    }
-    else if(humanChoice=="rock"&&computerChoice=="scissors"){
-        humanScore++;
-    }
-    else if(humanChoice=="rock"&&computerChoice=="paper"){
-        computerScore++;
-    }
-    else {
-        console.log("Same choice")
-    }
+        
+        }
+        let scoreMessage=`
+            computer : ${computerChoice} \n
+        Your Score:${humanScore}  Computer Score:${computerScore}`;
+        console.log(scoreMessage);
 
-    console.log(`Your Score : ${humanScore}
-    Computer Score = ${computerScore}`)
-}
+        if(status=='tie')
+        updateMessage('same choice'+ scoreMessage);
+        else updateMessage(scoreMessage);
+          
+}   
+
+// console.log(playRound('rock',getComputerChoice()));
 
 
-
-function playGame(){
+// script.js
+const displayMenu = document.querySelector(".displayMenu");
+displayMenu.style.backgroundColor = "aqua";
 
 
 
-    for(i=0;i<5;i++){
 
-    let humanChoice=getHumanChoice();
-    let computerChoice=getComputerChoice();
-    playRound(humanChoice,computerChoice);
+displayMenu.addEventListener('click',(event)=>{
+    // console.log(event.target.id);
+    humanChoice=event.target.id;
+    playRound(humanChoice,getComputerChoice());
     
-    
+    if(humanScore==5||computerScore==5){
+        if(humanScore>computerScore){
+            console.log("You win");
+            updateMessage("You Won!")
+        }
+        else {console.log("You lose!");
+            updateMessage("You lose! ")}
+        humanScore=computerScore=0;
     }
-    if(humanScore>computerScore){
-        console.log("You Won !")
-    }
-    else if(computerScore>humanScore)
-        console.log("You lost !")
-    else 
-        console.log("the game is tie !")
-}
+    console.log(`${humanScore}  ${computerScore}`)
 
-playGame();
+
+})
+
+
+// console.log(getHumanChoice())
+
+
+
+
+// function getHumanChoice(){
+//     let humanChoice= displayMenu.addEventListener('click',(event)=>{
+//         let target = event.target;
+//         switch(target.id){
+//             case 'rock': return 'rock';
+//             break;
+
+//             case 'paper': return 'paper';
+//             break;
+
+//             case 'scissors': return 'scissors';
+//             break;
+//         }
+//     })  
+    
+//     return humanChoice;
+
+// }
+
+
